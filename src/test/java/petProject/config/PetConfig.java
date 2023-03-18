@@ -1,4 +1,4 @@
-package config;
+package petProject.config;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -9,6 +9,9 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.junit.BeforeClass;
 
+import static petProject.config.Constants.BASE_PATH;
+import static petProject.config.Constants.BASE_URL;
+
 public class PetConfig {
 
     public static RequestSpecification pet_requestSpec;
@@ -18,8 +21,8 @@ public class PetConfig {
     public static void setup(){
 
         pet_requestSpec = new RequestSpecBuilder()
-                .setBaseUri("https://petstore3.swagger.io")
-                .setBasePath("/api/v3/")
+                .setBaseUri(BASE_URL)
+                .setBasePath(BASE_PATH)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .addFilter(new RequestLoggingFilter())

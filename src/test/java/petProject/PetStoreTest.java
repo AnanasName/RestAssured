@@ -1,5 +1,7 @@
-import config.PetConfig;
-import config.PetEndpoints;
+package petProject;
+
+import petProject.config.PetConfig;
+import petProject.config.PetEndpoints;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
