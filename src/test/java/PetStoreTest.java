@@ -97,8 +97,18 @@ public class PetStoreTest extends PetConfig {
     @Test
     public void deletePet(){
         given().
+                pathParam("petId", 4).
         when()
-                .delete("pet/1").
+                .delete(PetEndpoints.SINGLE_PET).
+        then();
+    }
+
+    @Test
+    public void getSinglePet() {
+        given()
+                .pathParam("petId", 2).
+        when()
+                .get(PetEndpoints.SINGLE_PET).
         then();
     }
 }
