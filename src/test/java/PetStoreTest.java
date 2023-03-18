@@ -93,4 +93,12 @@ public class PetStoreTest extends PetConfig {
                 .post(PetEndpoints.DEFAULT_PET_PATH).
                 then();
     }
+
+    @Test
+    public void deletePet(){
+        given().
+        when()
+                .delete("pet/1").
+        then();
+    }
 }
