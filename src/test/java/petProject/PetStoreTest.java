@@ -3,6 +3,12 @@ package petProject;
 import petProject.config.PetConfig;
 import petProject.config.PetEndpoints;
 import org.junit.Test;
+import petProject.pojo.Category;
+import petProject.pojo.Pet;
+import petProject.pojo.Tag;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -113,4 +119,22 @@ public class PetStoreTest extends PetConfig {
                 .get(PetEndpoints.SINGLE_PET).
         then();
     }
+
+    @Test
+    public void testPetSerializationByJSON(){
+        List<String> photoUrls = new ArrayList<String>();
+        photoUrls.add("strings");
+
+        List<Tag> tags = new ArrayList<Tag>();
+        tags.add(new Tag(0L, "string"));
+
+        Pet pet = new Pet(new Category(1L, "cat"), 13L, "doggie", photoUrls, "available", tags);
+
+        given().
+                body(pet).
+        when().
+                post(PetEndpoints.DEFAULT_PET_PATH).
+        then();
+    }
+
 }
