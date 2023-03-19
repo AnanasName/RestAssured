@@ -6,6 +6,8 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.junit.Test;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -72,5 +74,28 @@ public class FootballApiTests extends FootballConfig {
         String contentType = response.getHeader("Content-Type");
 
         System.out.println(contentType);
+        System.out.println(headers);
     }
+
+    @Test
+    public void extractFirstTeamName(){
+        String firstTeamName = get("competitions/").jsonPath().getString("competitions[0].name");
+
+        System.out.println(firstTeamName);
+    }
+
+    @Test
+    public void extractAllTeamNames(){
+        Response response =
+                given().
+                when().get("competitions/").
+                then().extract().response();
+
+        List<String> teamNames = response.path("competitions.name");
+
+        for (String teamName : teamNames){
+            System.out.println(teamName);
+        }
+    }
+
 }
