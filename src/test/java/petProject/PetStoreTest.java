@@ -1,5 +1,6 @@
 package petProject;
 
+import io.restassured.response.Response;
 import petProject.config.PetConfig;
 import petProject.config.PetEndpoints;
 import org.junit.Test;
@@ -39,9 +40,9 @@ public class PetStoreTest extends PetConfig {
 
         given()
                 .body(petBodyJson).
-        when()
+                when()
                 .post(PetEndpoints.DEFAULT_PET_PATH).
-        then();
+                then();
     }
 
     @Test
@@ -71,13 +72,13 @@ public class PetStoreTest extends PetConfig {
                 .body(petXml)
                 .header("Accept", "application/xml")
                 .header("Content-Type", "application/xml").
-       when()
+                when()
                 .post(PetEndpoints.DEFAULT_PET_PATH).
-       then();
+                then();
     }
 
     @Test
-    public void updatePetByJson(){
+    public void updatePetByJson() {
         String petBodyJson = "{\n" +
                 "  \"id\": 10,\n" +
                 "  \"name\": \"doggie\",\n" +
@@ -105,25 +106,25 @@ public class PetStoreTest extends PetConfig {
     }
 
     @Test
-    public void deletePet(){
+    public void deletePet() {
         given().
                 pathParam("petId", 4).
-        when()
+                when()
                 .delete(PetEndpoints.SINGLE_PET).
-        then();
+                then();
     }
 
     @Test
     public void getSinglePet() {
         given()
                 .pathParam("petId", 2).
-        when()
+                when()
                 .get(PetEndpoints.SINGLE_PET).
-        then();
+                then();
     }
 
     @Test
-    public void testPetSerializationByJSON(){
+    public void testPetSerializationByJSON() {
         List<String> photoUrls = new ArrayList<String>();
         photoUrls.add("strings");
 
@@ -134,31 +135,42 @@ public class PetStoreTest extends PetConfig {
 
         given().
                 body(pet).
-        when().
+                when().
                 post(PetEndpoints.DEFAULT_PET_PATH).
-        then();
+                then();
     }
 
     @Test
-    public void testPetSchemaXML(){
+    public void testPetSchemaXML() {
         given()
                 .pathParam("petId", 5).
                 header("Content-Type", "application/xml").
                 header("Accept", "application/xml").
-        when().
+                when().
                 get(PetEndpoints.SINGLE_PET).
-        then().
+                then().
                 body(matchesXsdInClasspath("PetXSD.xsd"));
     }
 
     @Test
-    public void testVideoGameSchemeJSON(){
+    public void testPetSchemaJSON() {
         given()
                 .pathParam("petId", 5).
-        when().
+                when().
                 get(PetEndpoints.SINGLE_PET).
-        then().
+                then().
                 body(matchesJsonSchemaInClasspath("PetJsonSchema.json"));
+    }
+
+    @Test
+    public void convertJSONToPojo() {
+        Response response = given().pathParam("petId", 5).
+                when().
+                get(PetEndpoints.SINGLE_PET);
+
+        Pet pet = response.getBody().as(Pet.class);
+
+        System.out.println(pet.toString() );
     }
 
 }

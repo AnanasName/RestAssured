@@ -15,6 +15,10 @@ public class Pet {
 
     private List<Tag> tags;
 
+    public Pet() {
+
+    }
+
     public Pet(Category category, Long id, String name, List<String> photoUrls, String status, List<Tag> tags) {
         this.category = category;
         this.id = id;
