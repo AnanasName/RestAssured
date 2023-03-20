@@ -11,9 +11,10 @@ import petProject.pojo.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.lessThan;
 
 public class PetStoreTest extends PetConfig {
 
@@ -173,4 +174,17 @@ public class PetStoreTest extends PetConfig {
         System.out.println(pet.toString() );
     }
 
+    @Test
+    public void captureResponseTime(){
+        long responseTime = get(PetEndpoints.DEFAULT_PET_PATH).time();
+        System.out.println("Response time in MS: " + responseTime);
+    }
+
+    @Test
+    public void assertOnResponseTime(){
+        when().
+                get(PetEndpoints.DEFAULT_PET_PATH).
+        then()
+                .time(lessThan(1000L));
+    }
 }
