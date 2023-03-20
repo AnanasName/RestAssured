@@ -12,6 +12,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 public class PetStoreTest extends PetConfig {
 
@@ -148,6 +149,16 @@ public class PetStoreTest extends PetConfig {
                 get(PetEndpoints.SINGLE_PET).
         then().
                 body(matchesXsdInClasspath("PetXSD.xsd"));
+    }
+
+    @Test
+    public void testVideoGameSchemeJSON(){
+        given()
+                .pathParam("petId", 5).
+        when().
+                get(PetEndpoints.SINGLE_PET).
+        then().
+                body(matchesJsonSchemaInClasspath("PetJsonSchema.json"));
     }
 
 }
