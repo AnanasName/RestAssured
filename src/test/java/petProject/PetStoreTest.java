@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 
 public class PetStoreTest extends PetConfig {
 
@@ -135,6 +136,18 @@ public class PetStoreTest extends PetConfig {
         when().
                 post(PetEndpoints.DEFAULT_PET_PATH).
         then();
+    }
+
+    @Test
+    public void testPetSchemaXML(){
+        given()
+                .pathParam("petId", 5).
+                header("Content-Type", "application/xml").
+                header("Accept", "application/xml").
+        when().
+                get(PetEndpoints.SINGLE_PET).
+        then().
+                body(matchesXsdInClasspath("PetXSD.xsd"));
     }
 
 }
