@@ -24,14 +24,14 @@ public class GPathJSONTests extends FootballConfig {
     @Test
     public void extractSingleValueWithFind(){
         Response response = get("teams/57");
-        String certainPlayer = response.path("squad.find {it.shirtNumber == 23}.name");
+        String certainPlayer = response.path("squad.find {it.nationality == 'Japan'}.name");
         System.out.println("Name of player = " + certainPlayer);
     }
 
     @Test
     public void extractListOfValuesWithFindAll(){
         Response response = get("teams/57");
-        List<String> playerNames = response.path("squad.findAll {it.shirtNumber >= 23}.name");
+        List<String> playerNames = response.path("squad.findAll {it.position == 'Defence'}.name");
         System.out.println("List of players" + playerNames);
     }
 }
