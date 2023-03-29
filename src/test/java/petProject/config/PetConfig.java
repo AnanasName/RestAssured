@@ -10,8 +10,8 @@ import io.restassured.specification.ResponseSpecification;
 import org.junit.BeforeClass;
 
 import static org.hamcrest.Matchers.lessThan;
-import static petProject.config.Constants.BASE_PATH;
-import static petProject.config.Constants.BASE_URL;
+import static petProject.util.Constants.BASE_PATH;
+import static petProject.util.Constants.BASE_URL;
 
 public class PetConfig {
 

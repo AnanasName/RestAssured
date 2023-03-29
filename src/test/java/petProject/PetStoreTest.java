@@ -15,6 +15,8 @@ import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.lessThan;
+import static petProject.util.Constants.PET_JSON_SCHEMA;
+import static petProject.util.Constants.PET_XSD;
 
 public class PetStoreTest extends PetConfig {
 
@@ -88,7 +90,7 @@ public class PetStoreTest extends PetConfig {
                 when().
                 get(PetEndpoints.SINGLE_PET).
                 then().
-                body(matchesXsdInClasspath("PetXSD.xsd"));
+                body(matchesXsdInClasspath(PET_XSD));
     }
 
     @Test
@@ -101,7 +103,7 @@ public class PetStoreTest extends PetConfig {
                 when().
                 get(PetEndpoints.SINGLE_PET).
                 then().
-                body(matchesJsonSchemaInClasspath("PetJsonSchema.json"));
+                body(matchesJsonSchemaInClasspath(PET_JSON_SCHEMA));
     }
 
     @Test
