@@ -16,6 +16,7 @@ import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertEquals;
 import static petProject.util.Constants.PET_JSON_SCHEMA;
 import static petProject.util.Constants.PET_XSD;
 
@@ -83,7 +84,8 @@ public class PetStoreTest extends PetConfig {
                 .pathParam("petId", petId).
                 when()
                 .get(PetEndpoints.SINGLE_PET).
-                then();
+                then()
+                .body("id", equalTo(petId));
     }
 
     @Test
@@ -117,7 +119,7 @@ public class PetStoreTest extends PetConfig {
     @Test
     public void convertJSONToPojo() {
 
-        int petId = 5;
+        long petId = 5L;
 
         Response response = given().pathParam("petId", petId).
                 when().
@@ -125,7 +127,9 @@ public class PetStoreTest extends PetConfig {
 
         Pet pet = response.getBody().as(Pet.class);
 
-        System.out.println(pet.toString());
+        assertEquals(petId, pet.getId().longValue());
+
+        System.out.println(pet);
     }
 
     @Test
