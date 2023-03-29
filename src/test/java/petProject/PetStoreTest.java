@@ -19,117 +19,11 @@ import static org.hamcrest.Matchers.lessThan;
 public class PetStoreTest extends PetConfig {
 
     @Test
-    public void createNewPetByJson() {
-        String petBodyJson = "{\n" +
-                "  \"id\": 10,\n" +
-                "  \"name\": \"doggie\",\n" +
-                "  \"category\": {\n" +
-                "    \"id\": 1,\n" +
-                "    \"name\": \"Dogs\"\n" +
-                "  },\n" +
-                "  \"photoUrls\": [\n" +
-                "    \"string\"\n" +
-                "  ],\n" +
-                "  \"tags\": [\n" +
-                "    {\n" +
-                "      \"id\": 0,\n" +
-                "      \"name\": \"string\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"status\": \"available\"\n" +
-                "}";
-
-        given()
-                .body(petBodyJson).
-                when()
-                .post(PetEndpoints.DEFAULT_PET_PATH).
-                then();
-    }
-
-    @Test
-    public void createNewPetByXml() {
-        String petXml =
-                "<pet>\n" +
-                        "\t<id>10</id>\n" +
-                        "\t<name>doggie</name>\n" +
-                        "\t<category>\n" +
-                        "\t\t<id>1</id>\n" +
-                        "\t\t<name>Dogs</name>\n" +
-                        "\t</category>\n" +
-                        "\t<photoUrls>\n" +
-                        "\t\t<photoUrl>string</photoUrl>\n" +
-                        "\t</photoUrls>\n" +
-                        "\t<tags>\n" +
-                        "\t\t<tag>\n" +
-                        "\t\t\t<id>0</id>\n" +
-                        "\t\t\t<name>string</name>\n" +
-                        "\t\t</tag>\n" +
-                        "\t</tags>\n" +
-                        "\t<status>available</status>\n" +
-                        "</pet>";
-
-
-        given()
-                .body(petXml)
-                .header("Accept", "application/xml")
-                .header("Content-Type", "application/xml").
-                when()
-                .post(PetEndpoints.DEFAULT_PET_PATH).
-                then();
-    }
-
-    @Test
-    public void updatePetByJson() {
-        String petBodyJson = "{\n" +
-                "  \"id\": 10,\n" +
-                "  \"name\": \"doggie\",\n" +
-                "  \"category\": {\n" +
-                "    \"id\": 1,\n" +
-                "    \"name\": \"Dogs\"\n" +
-                "  },\n" +
-                "  \"photoUrls\": [\n" +
-                "    \"string\"\n" +
-                "  ],\n" +
-                "  \"tags\": [\n" +
-                "    {\n" +
-                "      \"id\": 0,\n" +
-                "      \"name\": \"string\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"status\": \"available\"\n" +
-                "}";
-
-        given()
-                .body(petBodyJson).
-                when()
-                .post(PetEndpoints.DEFAULT_PET_PATH).
-                then();
-    }
-
-    @Test
-    public void deletePet() {
-        given().
-                pathParam("petId", 4).
-                when()
-                .delete(PetEndpoints.SINGLE_PET).
-                then();
-    }
-
-    @Test
-    public void getSinglePet() {
-        given()
-                .pathParam("petId", 2).
-                when()
-                .get(PetEndpoints.SINGLE_PET).
-                then();
-    }
-
-    @Test
     public void testPetSerializationByJSON() {
-        List<String> photoUrls = new ArrayList<String>();
+        List<String> photoUrls = new ArrayList<>();
         photoUrls.add("strings");
 
-        List<Tag> tags = new ArrayList<Tag>();
+        List<Tag> tags = new ArrayList<>();
         tags.add(new Tag(0L, "string"));
 
         Pet pet = new Pet(new Category(1L, "cat"), 13L, "doggie", photoUrls, "available", tags);
@@ -142,9 +36,53 @@ public class PetStoreTest extends PetConfig {
     }
 
     @Test
-    public void testPetSchemaXML() {
+    public void updatePetByJson() {
+        List<String> photoUrls = new ArrayList<>();
+        photoUrls.add("strings");
+
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag(0L, "string"));
+
+        Pet pet = new Pet(new Category(1L, "cat"), 13L, "maggie", photoUrls, "send", tags);
+
         given()
-                .pathParam("petId", 5).
+                .body(pet).
+                when()
+                .post(PetEndpoints.DEFAULT_PET_PATH).
+                then();
+    }
+
+    @Test
+    public void deletePet() {
+
+        int petId = 4;
+
+        given().
+                pathParam("petId", petId).
+                when()
+                .delete(PetEndpoints.SINGLE_PET).
+                then();
+    }
+
+    @Test
+    public void getSinglePet() {
+
+        int petId = 2;
+
+        given()
+                .pathParam("petId", petId).
+                when()
+                .get(PetEndpoints.SINGLE_PET).
+                then();
+    }
+
+    @Test
+    public void testPetSchemaXML() {
+
+        int petId = 5;
+
+        given()
+                .pathParam("petId", petId).
                 header("Content-Type", "application/xml").
                 header("Accept", "application/xml").
                 when().
@@ -155,8 +93,11 @@ public class PetStoreTest extends PetConfig {
 
     @Test
     public void testPetSchemaJSON() {
+
+        int petId = 5;
+
         given()
-                .pathParam("petId", 5).
+                .pathParam("petId", petId).
                 when().
                 get(PetEndpoints.SINGLE_PET).
                 then().
@@ -165,26 +106,32 @@ public class PetStoreTest extends PetConfig {
 
     @Test
     public void convertJSONToPojo() {
-        Response response = given().pathParam("petId", 5).
+
+        int petId = 5;
+
+        Response response = given().pathParam("petId", petId).
                 when().
                 get(PetEndpoints.SINGLE_PET);
 
         Pet pet = response.getBody().as(Pet.class);
 
-        System.out.println(pet.toString() );
+        System.out.println(pet.toString());
     }
 
     @Test
-    public void captureResponseTime(){
+    public void captureResponseTime() {
         long responseTime = get(PetEndpoints.DEFAULT_PET_PATH).time();
         System.out.println("Response time in MS: " + responseTime);
     }
 
     @Test
-    public void assertOnResponseTime(){
+    public void assertOnResponseTime() {
+
+        long timeout = 1000L;
+
         when().
                 get(PetEndpoints.DEFAULT_PET_PATH).
-        then()
-                .time(lessThan(1000L));
+                then()
+                .time(lessThan(timeout));
     }
 }
