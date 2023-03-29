@@ -6,4 +6,6 @@ public final class Constants {
 
     public static final String PET_JSON_SCHEMA = "PetJsonSchema.json";
     public static final String PET_XSD = "PetXSD.xsd";
+
+
 }

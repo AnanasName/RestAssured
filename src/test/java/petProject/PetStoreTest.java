@@ -14,6 +14,7 @@ import java.util.List;
 import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 import static petProject.util.Constants.PET_JSON_SCHEMA;
 import static petProject.util.Constants.PET_XSD;
@@ -22,36 +23,43 @@ public class PetStoreTest extends PetConfig {
 
     @Test
     public void testPetSerializationByJSON() {
+
+        int newPetId = 13;
+
         List<String> photoUrls = new ArrayList<>();
         photoUrls.add("strings");
 
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag(0L, "string"));
 
-        Pet pet = new Pet(new Category(1L, "cat"), 13L, "doggie", photoUrls, "available", tags);
+        Pet pet = new Pet(new Category(1L, "cat"), (long) newPetId, "doggie", photoUrls, "available", tags);
 
         given().
                 body(pet).
                 when().
-                post(PetEndpoints.DEFAULT_PET_PATH).
-                then();
+                post(PetEndpoints.DEFAULT_PET_PATH)
+                .then().body("id", equalTo(newPetId));
     }
 
     @Test
     public void updatePetByJson() {
+
+        String newName = "Maggie";
+
         List<String> photoUrls = new ArrayList<>();
         photoUrls.add("strings");
 
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag(0L, "string"));
 
-        Pet pet = new Pet(new Category(1L, "cat"), 13L, "maggie", photoUrls, "send", tags);
+        Pet pet = new Pet(new Category(1L, "cat"), 13L, newName, photoUrls, "send", tags);
 
         given()
                 .body(pet).
                 when()
                 .post(PetEndpoints.DEFAULT_PET_PATH).
-                then();
+                then()
+                .body("name", equalTo(newName));
     }
 
     @Test
