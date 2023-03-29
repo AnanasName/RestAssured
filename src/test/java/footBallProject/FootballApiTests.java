@@ -16,28 +16,40 @@ public class FootballApiTests extends FootballConfig {
 
     @Test
     public void getDetailsOfOneArea(){
+
+        int areas = 2255;
+        String expectedName = "United Kingdom";
+
         given()
-                .queryParam("areas", 2255).
+                .queryParam("areas", areas).
         when()
-                .get("areas");
+                .get("areas").
+        then()
+                .body("areas.name[0]", equalTo(expectedName));
     }
 
     @Test
     public void getDateFounded(){
+
+        int expectedValue = 1886;
+
         given().
         when()
                 .get("teams/57").
         then()
-                .body("founded", equalTo(1886));
+                .body("founded", equalTo(expectedValue));
     }
 
     @Test
     public void getFirstTeamName(){
+
+        String expectedLeague = "Campeonato Brasileiro Série A";
+
         given().
         when()
                 .get("competitions/").
         then().
-                body("competitions[0].name", equalTo("Campeonato Brasileiro Série A"));
+                body("competitions[0].name", equalTo(expectedLeague));
     }
 
     @Test
@@ -57,6 +69,7 @@ public class FootballApiTests extends FootballConfig {
                         .extract().response();
 
         String jsonReponseAsString = response.asString();
+        System.out.println(jsonReponseAsString);
     }
 
     @Test
