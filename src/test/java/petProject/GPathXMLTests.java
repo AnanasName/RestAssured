@@ -17,7 +17,9 @@ public class GPathXMLTests extends PetConfig {
     @Test
     public void getPetNameById() {
 
-        Response response = given().pathParam("petId", 3).
+        int petId = 3;
+
+        Response response = given().pathParam("petId", petId).
                 header("Content-Type", "application/xml").
                 header("Accept", "application/xml").
                 when()
@@ -28,7 +30,7 @@ public class GPathXMLTests extends PetConfig {
 
         System.out.println(name);
 
-        assertEquals(id, "3");
+        assertEquals(id, petId);
     }
 
     @Test
@@ -49,7 +51,7 @@ public class GPathXMLTests extends PetConfig {
     }
 
     @Test
-    public void getSingleNode(){
+    public void getSingleNode() {
         Response response = given().queryParam("status", Status.PENDING.toString().toLowerCase()).
                 header("Content-Type", "application/xml").
                 header("Accept", "application/xml").
@@ -58,19 +60,21 @@ public class GPathXMLTests extends PetConfig {
 
         String responseAsString = response.asString();
 
+        String itemName = "Dog 3";
+
         Node pet = XmlPath.from(responseAsString).get(
-                "ArrayList.item.find { pet -> def name = pet.name; name == 'Dog 3' }"
+                "ArrayList.item.find { pet -> def name = pet.name; name == '" + itemName + "' }"
         );
 
         String petName = pet.get("name").toString();
 
         System.out.println(petName);
 
-        assertEquals("Dog 3", petName);
+        assertEquals(itemName, petName);
     }
 
     @Test
-    public void getSingleElementDepthFirst(){
+    public void getSingleElementDepthFirst() {
         Response response = given().queryParam("status", Status.SOLD.toString().toLowerCase()).
                 header("Content-Type", "application/xml").
                 header("Accept", "application/xml").
@@ -79,12 +83,33 @@ public class GPathXMLTests extends PetConfig {
 
         String responseAsString = response.asString();
 
+        String itemName = "Dog 2";
+
         String photoUrl_1 = XmlPath.from(responseAsString).getString(
-                "**.find { it.name == 'Dog 2' }.photoUrls.photoUrl[0]"
+                "**.find { it.name ==  '" + itemName + "' }.photoUrls.photoUrl[0]"
         );
 
         System.out.println(photoUrl_1);
 
         assertEquals("url1", photoUrl_1);
+    }
+
+    @Test
+    public void getAllNodesBasedOnCondition() {
+        Response response = given().queryParam("status", Status.AVAILABLE.toString().toLowerCase()).
+                header("Content-Type", "application/xml").
+                header("Accept", "application/xml").
+                when()
+                .get(PetEndpoints.FIND_BY_STATUS);
+
+        String responseAsString = response.asString();
+
+        Long conditionId = 10L;
+
+        List<Node> allPetsOverCertainId = XmlPath.from(responseAsString).get(
+                "ArrayList.item.findAll { it.id.toLong() >= " + conditionId + "}"
+        );
+
+        System.out.println(allPetsOverCertainId);
     }
 }
