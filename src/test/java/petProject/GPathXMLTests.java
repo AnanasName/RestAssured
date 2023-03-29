@@ -47,4 +47,25 @@ public class GPathXMLTests extends PetConfig {
 
         System.out.println(allResult.get(2).get("name").toString());
     }
+
+    @Test
+    public void getSingleNode(){
+        Response response = given().queryParam("status", Status.PENDING.toString().toLowerCase()).
+                header("Content-Type", "application/xml").
+                header("Accept", "application/xml").
+                when()
+                .get(PetEndpoints.FIND_BY_STATUS);
+
+        String responseAsString = response.asString();
+
+        Node pet = XmlPath.from(responseAsString).get(
+                "ArrayList.item.find { pet -> def name = pet.name; name == 'Dog 3' }"
+        );
+
+        String petName = pet.get("name").toString();
+
+        System.out.println(petName);
+
+        assertEquals("Dog 3", petName);
+    }
 }
