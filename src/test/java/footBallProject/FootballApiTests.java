@@ -10,7 +10,9 @@ import java.util.List;
 
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertTrue;
 
 public class FootballApiTests extends FootballConfig {
 
@@ -60,6 +62,9 @@ public class FootballApiTests extends FootballConfig {
 
     @Test
     public void getAllTeamData_DoCheckFirst(){
+
+        String clubName = "Arsenal";
+
         Response response =
                 given().
                 when()
@@ -69,11 +74,14 @@ public class FootballApiTests extends FootballConfig {
                         .extract().response();
 
         String jsonReponseAsString = response.asString();
-        System.out.println(jsonReponseAsString);
+        assertTrue(jsonReponseAsString.contains(clubName));
     }
 
     @Test
     public void extractHeaders(){
+
+        String contentTypeHeader = "application/json;charset=UTF-8";
+
         Response response =
                 given().
                 when().
@@ -82,12 +90,9 @@ public class FootballApiTests extends FootballConfig {
                         .contentType(ContentType.JSON)
                         .extract().response();
 
-        Headers headers = response.getHeaders();
-
         String contentType = response.getHeader("Content-Type");
 
-        System.out.println(contentType);
-        System.out.println(headers);
+        assertTrue(contentType.equals(contentTypeHeader));
     }
 
     @Test
@@ -99,16 +104,25 @@ public class FootballApiTests extends FootballConfig {
 
     @Test
     public void extractAllTeamNames(){
+
+        boolean flag = false;
+
+        String expectedLeagueName = "Bundesliga";
+
         Response response =
                 given().
                 when().get("competitions/").
                 then().extract().response();
 
-        List<String> teamNames = response.path("competitions.name");
+        List<String> leagueNames = response.path("competitions.name");
 
-        for (String teamName : teamNames){
+        for (String teamName : leagueNames){
+            if (teamName.equals(expectedLeagueName))
+                flag = true;
             System.out.println(teamName);
         }
+
+        assertTrue(flag);
     }
 
 }
