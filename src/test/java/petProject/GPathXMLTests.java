@@ -68,4 +68,23 @@ public class GPathXMLTests extends PetConfig {
 
         assertEquals("Dog 3", petName);
     }
+
+    @Test
+    public void getSingleElementDepthFirst(){
+        Response response = given().queryParam("status", Status.SOLD.toString().toLowerCase()).
+                header("Content-Type", "application/xml").
+                header("Accept", "application/xml").
+                when()
+                .get(PetEndpoints.FIND_BY_STATUS);
+
+        String responseAsString = response.asString();
+
+        String photoUrl_1 = XmlPath.from(responseAsString).getString(
+                "**.find { it.name == 'Dog 2' }.photoUrls.photoUrl[0]"
+        );
+
+        System.out.println(photoUrl_1);
+
+        assertEquals("url1", photoUrl_1);
+    }
 }
