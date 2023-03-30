@@ -16,13 +16,13 @@ import static org.junit.Assert.assertEquals;
 
 public class StoreTest extends StoreConfig {
     @Test
-    public void testPostOrder(){
+    public void testPostOrder() {
 
         int orderId = 213;
 
         String date = OffsetDateTime
-                .now( ZoneOffset.UTC )
-                .minus( Period.ofYears( 1 ) )
+                .now(ZoneOffset.UTC)
+                .minus(Period.ofYears(1))
                 .toString();
         Order order = new Order(198772, 7, orderId, date, true, "approved");
 
@@ -35,7 +35,7 @@ public class StoreTest extends StoreConfig {
     }
 
     @Test
-    public void getOrderByID(){
+    public void getOrderByID() {
         int orderId = 213;
 
         Response response = given()
@@ -46,5 +46,15 @@ public class StoreTest extends StoreConfig {
         Order order = response.as(Order.class);
 
         assertEquals(orderId, order.getId());
+    }
+
+    @Test
+    public void deleteOrderById() {
+        int orderId = 214;
+
+        given()
+                .pathParam("orderId", orderId)
+                .when()
+                .delete(StoreEndpoints.STORE_ORDER_BY_ID);
     }
 }
