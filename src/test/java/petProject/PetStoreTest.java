@@ -7,11 +7,13 @@ import org.junit.Test;
 import petProject.pojo.Category;
 import petProject.pojo.Pet;
 import petProject.pojo.Tag;
+import petProject.util.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.*;
+import static io.restassured.internal.http.Status.SUCCESS;
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
@@ -174,5 +176,25 @@ public class PetStoreTest extends PetConfig {
         }
 
         assertTrue(flag);
+    }
+
+    @Test
+    public void updatePetById() {
+
+        int petId = 3;
+        String petName = "Jame";
+        String petStatus = Status.AVAILABLE.toString().toLowerCase();
+
+        Response response = given().pathParam("petId", petId).queryParam("name", petName).queryParam("status", petStatus).
+                when().
+                post(PetEndpoints.SINGLE_PET);
+
+        Pet responsePet = response.as(Pet.class);
+
+        assertTrue(SUCCESS.matches(response.statusCode()));
+
+        assertEquals(petId, responsePet.getId().longValue());
+        assertEquals(petName, responsePet.getName());
+        assertEquals(petStatus, responsePet.getStatus());
     }
 }
