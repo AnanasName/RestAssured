@@ -16,8 +16,7 @@ import static io.restassured.RestAssured.*;
 import static io.restassured.internal.http.Status.SUCCESS;
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static petProject.util.Constants.PET_JSON_SCHEMA;
@@ -42,7 +41,9 @@ public class PetStoreTest extends PetConfig {
                 body(pet).
                 when().
                 post(PetEndpoints.DEFAULT_PET_PATH)
-                .then().body("id", equalTo(newPetId));
+                .then()
+                .statusCode(is(200))
+                .body("id", equalTo(newPetId));
     }
 
     @Test
@@ -63,6 +64,7 @@ public class PetStoreTest extends PetConfig {
                 when()
                 .post(PetEndpoints.DEFAULT_PET_PATH).
                 then()
+                .statusCode(is(200))
                 .body("name", equalTo(newName));
     }
 
@@ -71,11 +73,12 @@ public class PetStoreTest extends PetConfig {
 
         int petId = 4;
 
-        given().
+        Response response = given().
                 pathParam("petId", petId).
                 when()
-                .delete(PetEndpoints.SINGLE_PET).
-                then();
+                .delete(PetEndpoints.SINGLE_PET);
+
+        assertTrue(SUCCESS.matches(response.getStatusCode()));
     }
 
     @Test
@@ -88,6 +91,7 @@ public class PetStoreTest extends PetConfig {
                 when()
                 .get(PetEndpoints.SINGLE_PET).
                 then()
+                .statusCode(is(200))
                 .body("id", equalTo(petId));
     }
 
@@ -128,6 +132,8 @@ public class PetStoreTest extends PetConfig {
                 when().
                 get(PetEndpoints.SINGLE_PET);
 
+        assertTrue(SUCCESS.matches(response.getStatusCode()));
+
         Pet pet = response.getBody().as(Pet.class);
 
         assertEquals(petId, pet.getId().longValue());
@@ -137,18 +143,26 @@ public class PetStoreTest extends PetConfig {
 
     @Test
     public void captureResponseTime() {
-        long responseTime = get(PetEndpoints.DEFAULT_PET_PATH).time();
+
+        int petId = 3;
+
+        long responseTime = given().pathParam("petId", petId).
+                when().
+                get(PetEndpoints.SINGLE_PET).time();
         System.out.println("Response time in MS: " + responseTime);
     }
 
     @Test
     public void assertOnResponseTime() {
 
+        int petId = 3;
+
         long timeout = 1000L;
 
-        when().
-                get(PetEndpoints.DEFAULT_PET_PATH).
-                then()
+        given().pathParam("petId", petId).
+                when().
+                get(PetEndpoints.SINGLE_PET)
+                .then()
                 .time(lessThan(timeout));
     }
 
@@ -161,6 +175,8 @@ public class PetStoreTest extends PetConfig {
         Response response = given().queryParam("tags", tags).
                 when()
                 .get(PetEndpoints.FIND_BY_TAGS);
+
+        assertTrue(SUCCESS.matches(response.getStatusCode()));
 
         Pet[] pets = response.as(Pet[].class);
 
