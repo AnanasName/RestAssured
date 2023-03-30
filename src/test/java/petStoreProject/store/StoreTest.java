@@ -57,4 +57,5 @@ public class StoreTest extends StoreConfig {
                 .when()
                 .delete(StoreEndpoints.STORE_ORDER_BY_ID);
     }
+
 }
