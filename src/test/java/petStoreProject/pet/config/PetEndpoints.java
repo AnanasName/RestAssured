@@ -1,4 +1,4 @@
-package petProject.config;
+package petStoreProject.pet.config;
 
 public interface PetEndpoints {
 

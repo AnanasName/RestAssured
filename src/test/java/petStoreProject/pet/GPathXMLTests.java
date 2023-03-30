@@ -1,12 +1,12 @@
-package petProject;
+package petStoreProject.pet;
 
 import io.restassured.path.xml.XmlPath;
 import io.restassured.path.xml.element.Node;
 import io.restassured.response.Response;
 import org.junit.Test;
-import petProject.config.PetConfig;
-import petProject.config.PetEndpoints;
-import petProject.util.Status;
+import petStoreProject.pet.config.PetConfig;
+import petStoreProject.pet.config.PetEndpoints;
+import petStoreProject.pet.util.Status;
 
 import java.util.List;
 
@@ -104,7 +104,7 @@ public class GPathXMLTests extends PetConfig {
 
         String responseAsString = response.asString();
 
-        Long conditionId = 10L;
+        long conditionId = 10L;
 
         List<Node> allPetsOverCertainId = XmlPath.from(responseAsString).get(
                 "ArrayList.item.findAll { it.id.toLong() >= " + conditionId + "}"

@@ -1,4 +1,4 @@
-package petProject.config;
+package petStoreProject.store.config;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -10,18 +10,17 @@ import io.restassured.specification.ResponseSpecification;
 import org.junit.BeforeClass;
 
 import static org.hamcrest.Matchers.lessThan;
-import static petProject.util.Constants.BASE_PATH;
-import static petProject.util.Constants.BASE_URL;
+import static petStoreProject.pet.util.Constants.BASE_PATH;
+import static petStoreProject.pet.util.Constants.BASE_URL;
 
-public class PetConfig {
-
-    public static RequestSpecification pet_requestSpec;
-    public static ResponseSpecification pet_responseSpec;
+public class StoreConfig {
+    public static RequestSpecification store_requestSpec;
+    public static ResponseSpecification store_responseSpec;
 
     @BeforeClass
     public static void setup(){
 
-        pet_requestSpec = new RequestSpecBuilder()
+        store_requestSpec = new RequestSpecBuilder()
                 .setBaseUri(BASE_URL)
                 .setBasePath(BASE_PATH)
                 .addHeader("Content-Type", "application/json")
@@ -30,12 +29,12 @@ public class PetConfig {
                 .addFilter(new ResponseLoggingFilter())
                 .build();
 
-        pet_responseSpec = new ResponseSpecBuilder()
+        store_responseSpec = new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .expectResponseTime(lessThan(3000L))
                 .build();
 
-        RestAssured.requestSpecification = pet_requestSpec;
-        RestAssured.responseSpecification = pet_responseSpec;
+        RestAssured.requestSpecification = store_requestSpec;
+        RestAssured.responseSpecification = store_responseSpec;
     }
 }

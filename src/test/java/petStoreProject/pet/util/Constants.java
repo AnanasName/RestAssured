@@ -1,4 +1,4 @@
-package petProject.util;
+package petStoreProject.pet.util;
 
 public final class Constants {
     public static final String BASE_URL = "https://petstore3.swagger.io";
