@@ -6,4 +6,5 @@ public interface PetEndpoints {
     String SINGLE_PET = "pet/{petId}";
 
     String FIND_BY_STATUS = "pet/findByStatus";
+    String FIND_BY_TAGS = "pet/findByTags";
 }

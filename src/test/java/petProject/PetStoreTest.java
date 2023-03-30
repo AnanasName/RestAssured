@@ -17,6 +17,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static petProject.util.Constants.PET_JSON_SCHEMA;
 import static petProject.util.Constants.PET_XSD;
 
@@ -147,5 +148,31 @@ public class PetStoreTest extends PetConfig {
                 get(PetEndpoints.DEFAULT_PET_PATH).
                 then()
                 .time(lessThan(timeout));
+    }
+
+    @Test
+    public void findPetsByTag() {
+
+        List<String> tags = new ArrayList<>();
+        tags.add("string");
+
+        Response response = given().queryParam("tags", tags).
+                when()
+                .get(PetEndpoints.FIND_BY_TAGS);
+
+        Pet[] pets = response.as(Pet[].class);
+
+        List<Tag> responseTags = pets[0].getTags();
+
+        boolean flag = false;
+
+        for (Tag tag : responseTags) {
+            if (tag.getName().equals(tags.get(0))) {
+                flag = true;
+                break;
+            }
+        }
+
+        assertTrue(flag);
     }
 }
