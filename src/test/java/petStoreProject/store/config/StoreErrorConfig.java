@@ -14,6 +14,9 @@ import static petStoreProject.pet.util.Constants.BASE_PATH;
 import static petStoreProject.pet.util.Constants.BASE_URL;
 
 public class StoreErrorConfig {
+
+    private static final long TIMEOUT_TIME = 3000L;
+
     public static RequestSpecification store_requestSpec;
     public static ResponseSpecification store_responseSpec;
 
@@ -30,7 +33,7 @@ public class StoreErrorConfig {
                 .build();
 
         store_responseSpec = new ResponseSpecBuilder()
-                .expectResponseTime(lessThan(3000L))
+                .expectResponseTime(lessThan(TIMEOUT_TIME))
                 .build();
 
         RestAssured.requestSpecification = store_requestSpec;

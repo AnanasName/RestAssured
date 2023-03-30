@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static petStoreProject.pet.util.Constants.BASE_PATH;
 import static petStoreProject.pet.util.Constants.BASE_URL;
 
-public class PetConfig {
+public class PetErrorConfig {
 
     private static final long TIMEOUT_TIME = 3000L;
 
@@ -33,7 +33,6 @@ public class PetConfig {
                 .build();
 
         pet_responseSpec = new ResponseSpecBuilder()
-                .expectStatusCode(200)
                 .expectResponseTime(lessThan(TIMEOUT_TIME))
                 .build();
 
