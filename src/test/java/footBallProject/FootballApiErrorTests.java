@@ -55,4 +55,15 @@ public class FootballApiErrorTests extends FootballErrorConfig {
 
         assertTrue(FAILURE.matches(response.getStatusCode()));
     }
+
+    @Test
+    public void getStandingsForLeague_failUnknowLeague(){
+        String league = "AAA";
+
+        Response response =
+                given().pathParam("id", league).
+                        when().get("competitions/{id}/standings");
+
+        assertTrue(FAILURE.matches(response.getStatusCode()));
+    }
 }

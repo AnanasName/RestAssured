@@ -2,6 +2,7 @@ package footBallProject;
 
 import footBallProject.config.FootballConfig;
 import footBallProject.pojo.Person;
+import footBallProject.pojo.Standings;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Test;
@@ -147,8 +148,9 @@ public class FootballApiTests extends FootballConfig {
                 given().pathParam("id", league).
                         when().get("competitions/{id}/standings");
 
-        Person person = response.as(Person.class);
+        Standings standings = response.as(Standings.class);
 
-        assertEquals("Cristiano Ronaldo", person.getName());
+        assertEquals("Premier League", standings.getCompetition().getName());
+        assertEquals(2072, standings.getArea().getId());
     }
 }
