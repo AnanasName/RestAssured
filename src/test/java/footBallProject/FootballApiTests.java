@@ -139,4 +139,16 @@ public class FootballApiTests extends FootballConfig {
         assertEquals("Cristiano Ronaldo", person.getName());
     }
 
+    @Test
+    public void getStandingsForLeague(){
+        String league = "PL";
+
+        Response response =
+                given().pathParam("id", league).
+                        when().get("competitions/{id}/standings");
+
+        Person person = response.as(Person.class);
+
+        assertEquals("Cristiano Ronaldo", person.getName());
+    }
 }
