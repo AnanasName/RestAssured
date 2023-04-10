@@ -17,7 +17,7 @@ public class GPathXMLTests extends PetConfig {
     @Test
     public void getPetNameById() {
 
-        int petId = 3;
+        int petId = 2;
 
         Response response = given().pathParam("petId", petId).
                 header("Content-Type", "application/xml").
@@ -30,7 +30,7 @@ public class GPathXMLTests extends PetConfig {
 
         System.out.println(name);
 
-        assertEquals(id, petId);
+        assertEquals(id, String.valueOf(petId));
     }
 
     @Test

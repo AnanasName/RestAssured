@@ -136,7 +136,7 @@ public class PetTest extends PetConfig {
     @Test
     public void captureResponseTime() {
 
-        int petId = 3;
+        int petId = 5;
 
         long responseTime = given().pathParam("petId", petId).
                 when().
@@ -147,7 +147,7 @@ public class PetTest extends PetConfig {
     @Test
     public void assertOnResponseTime() {
 
-        int petId = 3;
+        int petId = 2;
 
         long timeout = 1000L;
 
@@ -187,7 +187,7 @@ public class PetTest extends PetConfig {
     @Test
     public void updatePetById() {
 
-        int petId = 3;
+        int petId = 2;
         String petName = "Jame";
         String petStatus = Status.AVAILABLE.toString().toLowerCase();
 
